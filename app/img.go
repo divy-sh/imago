@@ -21,6 +21,7 @@ type Img struct {
 	w int
 }
 
+// create a new blank image
 func NewImage(height, width int) (*Img, error) {
 	if height <= 0 || width <= 0 {
 		return nil, errors.New("invalid image dimensions")
@@ -74,10 +75,7 @@ func Load(path string) (*Img, error) {
 
 // SaveAsPNG function to save the Img as a PNG file
 func (img *Img) SaveAsPNG(filename string) error {
-	// Create a new RGBA image with the same width and height
 	rgba := image.NewRGBA(image.Rect(0, 0, img.w, img.h))
-
-	// Populate the RGBA image with data from the Img struct
 	for y := 0; y < img.h; y++ {
 		for x := 0; x < img.w; x++ {
 			r := uint8(img.p[y][x].r)
@@ -87,15 +85,11 @@ func (img *Img) SaveAsPNG(filename string) error {
 			rgba.Set(x, y, color.RGBA{r, g, b, a})
 		}
 	}
-
-	// Create a file to save the PNG
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-
-	// Encode the RGBA image as a PNG and write it to the file
 	if err := png.Encode(file, rgba); err != nil {
 		return err
 	}
@@ -103,6 +97,7 @@ func (img *Img) SaveAsPNG(filename string) error {
 	return nil
 }
 
+// flip image horizontally
 func (img *Img) HorizontalFlip() (*Img, error) {
 	newImg, _ := NewImage(img.h, img.w)
 	for i := range img.h {
@@ -113,6 +108,7 @@ func (img *Img) HorizontalFlip() (*Img, error) {
 	return newImg, nil
 }
 
+// flip image vertically
 func (img *Img) VerticalFlip() (*Img, error) {
 	newImg, _ := NewImage(img.h, img.w)
 	for i := range img.h {
