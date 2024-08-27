@@ -1,2 +1,2 @@
 # imago
-An image editor tool written in rust
+An image editor tool written in go
