@@ -37,29 +37,31 @@ func NewImage(height, width int) (*Img, error) {
 	}, nil
 }
 
-// load image
+// Load image from file path
 func Load(path string) (*Img, error) {
 	reader, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
-	m, _, err := image.Decode(reader)
 	defer reader.Close()
+
+	m, _, err := image.Decode(reader)
 	if err != nil {
 		return nil, err
 	}
 	bounds := m.Bounds()
 
-	height := bounds.Max.X - bounds.Min.X
-	width := bounds.Max.Y - bounds.Min.Y
+	width := bounds.Max.X - bounds.Min.X
+	height := bounds.Max.Y - bounds.Min.Y
 	image, err := NewImage(height, width)
 	if err != nil {
 		return nil, err
 	}
-	for x := 0; x < height; x++ {
-		for y := 0; y < width; y++ {
-			red, green, blue, alpha := m.At(y, x).RGBA()
-			image.p[x][y] = Pixel{
+
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			red, green, blue, alpha := m.At(x, y).RGBA()
+			image.p[y][x] = Pixel{
 				r: float64(red),
 				g: float64(green),
 				b: float64(blue),
@@ -78,10 +80,10 @@ func (img *Img) SaveAsPNG(filename string) error {
 	// Populate the RGBA image with data from the Img struct
 	for y := 0; y < img.h; y++ {
 		for x := 0; x < img.w; x++ {
-			r := uint8(img.p[y][x].r * 255)
-			g := uint8(img.p[y][x].g * 255)
-			b := uint8(img.p[y][x].b * 255)
-			a := uint8(img.p[y][x].a * 255)
+			r := uint8(img.p[y][x].r)
+			g := uint8(img.p[y][x].g)
+			b := uint8(img.p[y][x].b)
+			a := uint8(img.p[y][x].a)
 			rgba.Set(x, y, color.RGBA{r, g, b, a})
 		}
 	}
