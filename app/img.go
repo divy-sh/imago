@@ -112,3 +112,13 @@ func (img *Img) HorizontalFlip() (*Img, error) {
 	}
 	return newImg, nil
 }
+
+func (img *Img) VerticalFlip() (*Img, error) {
+	newImg, _ := NewImage(img.h, img.w)
+	for i := range img.h {
+		for j := range img.w {
+			newImg.p[i][j] = img.p[img.h-i-1][j]
+		}
+	}
+	return newImg, nil
+}
