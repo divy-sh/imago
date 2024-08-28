@@ -63,10 +63,10 @@ func Load(path string) (*Img, error) {
 		for x := 0; x < width; x++ {
 			red, green, blue, alpha := m.At(x, y).RGBA()
 			image.p[y][x] = Pixel{
-				r: float64(red),
-				g: float64(green),
-				b: float64(blue),
-				a: float64(alpha),
+				r: float64(red) / 255.0,
+				g: float64(green) / 255.0,
+				b: float64(blue) / 255.0,
+				a: float64(alpha) / 255.0,
 			}
 		}
 	}
@@ -78,10 +78,10 @@ func (img *Img) SaveAsPNG(filename string) error {
 	rgba := image.NewRGBA(image.Rect(0, 0, img.w, img.h))
 	for y := 0; y < img.h; y++ {
 		for x := 0; x < img.w; x++ {
-			r := uint8(img.p[y][x].r)
-			g := uint8(img.p[y][x].g)
-			b := uint8(img.p[y][x].b)
-			a := uint8(img.p[y][x].a)
+			r := uint8(img.p[y][x].r * 0xffff)
+			g := uint8(img.p[y][x].g * 0xffff)
+			b := uint8(img.p[y][x].b * 0xffff)
+			a := uint8(img.p[y][x].a * 0xffff)
 			rgba.Set(x, y, color.RGBA{r, g, b, a})
 		}
 	}
@@ -117,4 +117,23 @@ func (img *Img) VerticalFlip() (*Img, error) {
 		}
 	}
 	return newImg, nil
+}
+
+func (img *Img) Brighten(bVal float64) (*Img, error) {
+	maxVal := 0.
+	newImg, _ := NewImage(img.h, img.w)
+	for i := range img.h {
+		for j := range img.w {
+			maxVal = max(maxVal, img.p[i][j].b)
+			newImg.p[i][j].r = clampPixelValue(img.p[i][j].r + bVal)
+			newImg.p[i][j].g = clampPixelValue(img.p[i][j].g + bVal)
+			newImg.p[i][j].b = clampPixelValue(img.p[i][j].b + bVal)
+			newImg.p[i][j].a = img.p[i][j].a
+		}
+	}
+	return newImg, nil
+}
+
+func clampPixelValue(val float64) float64 {
+	return min(max(val, 0), 0xffff)
 }

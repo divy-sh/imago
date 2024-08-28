@@ -12,6 +12,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	img, _ = img.VerticalFlip()
+	img, _ = img.Brighten(255)
 	img.SaveAsPNG("compressed.png")
 }
