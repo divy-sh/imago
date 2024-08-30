@@ -135,5 +135,5 @@ func (img *Img) Brighten(bVal float64) (*Img, error) {
 }
 
 func clampPixelValue(val float64) float64 {
-	return min(max(val, 0), 0xfff)
+	return min(max(val, 0), 0xffff)
 }
