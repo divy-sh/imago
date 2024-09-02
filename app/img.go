@@ -120,14 +120,44 @@ func (img *Img) VerticalFlip() (*Img, error) {
 }
 
 func (img *Img) Brighten(bVal float64) (*Img, error) {
-	maxVal := 0.
 	newImg, _ := NewImage(img.h, img.w)
 	for i := range img.h {
 		for j := range img.w {
-			maxVal = max(maxVal, img.p[i][j].b)
 			newImg.p[i][j].r = clampPixelValue(img.p[i][j].r + bVal)
 			newImg.p[i][j].g = clampPixelValue(img.p[i][j].g + bVal)
 			newImg.p[i][j].b = clampPixelValue(img.p[i][j].b + bVal)
+			newImg.p[i][j].a = img.p[i][j].a
+		}
+	}
+	return newImg, nil
+}
+
+func (img *Img) GetRed() (*Img, error) {
+	newImg, _ := NewImage(img.h, img.w)
+	for i := range img.h {
+		for j := range img.w {
+			newImg.p[i][j].r = img.p[i][j].r
+			newImg.p[i][j].a = img.p[i][j].a
+		}
+	}
+	return newImg, nil
+}
+
+func (img *Img) GetGreen() (*Img, error) {
+	newImg, _ := NewImage(img.h, img.w)
+	for i := range img.h {
+		for j := range img.w {
+			newImg.p[i][j].g = img.p[i][j].g
+			newImg.p[i][j].a = img.p[i][j].a
+		}
+	}
+	return newImg, nil
+}
+func (img *Img) GetBlue() (*Img, error) {
+	newImg, _ := NewImage(img.h, img.w)
+	for i := range img.h {
+		for j := range img.w {
+			newImg.p[i][j].b = img.p[i][j].b
 			newImg.p[i][j].a = img.p[i][j].a
 		}
 	}
