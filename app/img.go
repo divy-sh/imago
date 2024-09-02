@@ -99,71 +99,69 @@ func (img *Img) SaveAsPNG(filename string) error {
 
 // flip image horizontally
 func (img *Img) HorizontalFlip() (*Img, error) {
-	newImg, _ := NewImage(img.h, img.w)
-	for i := range img.h {
-		for j := range img.w {
+	return process(
+		func(i, j int, newImg *Img) {
 			newImg.p[i][j] = img.p[i][img.w-j-1]
-		}
-	}
-	return newImg, nil
+		}, img,
+	)
 }
 
 // flip image vertically
 func (img *Img) VerticalFlip() (*Img, error) {
-	newImg, _ := NewImage(img.h, img.w)
-	for i := range img.h {
-		for j := range img.w {
+	return process(
+		func(i, j int, newImg *Img) {
 			newImg.p[i][j] = img.p[img.h-i-1][j]
-		}
-	}
-	return newImg, nil
+		}, img,
+	)
 }
 
 func (img *Img) Brighten(bVal float64) (*Img, error) {
-	newImg, _ := NewImage(img.h, img.w)
-	for i := range img.h {
-		for j := range img.w {
+	return process(
+		func(i, j int, newImg *Img) {
 			newImg.p[i][j].r = clampPixelValue(img.p[i][j].r + bVal)
 			newImg.p[i][j].g = clampPixelValue(img.p[i][j].g + bVal)
 			newImg.p[i][j].b = clampPixelValue(img.p[i][j].b + bVal)
 			newImg.p[i][j].a = img.p[i][j].a
-		}
-	}
-	return newImg, nil
+		}, img,
+	)
 }
 
 func (img *Img) GetRed() (*Img, error) {
-	newImg, _ := NewImage(img.h, img.w)
-	for i := range img.h {
-		for j := range img.w {
+	return process(
+		func(i, j int, newImg *Img) {
 			newImg.p[i][j].r = img.p[i][j].r
 			newImg.p[i][j].a = img.p[i][j].a
-		}
-	}
-	return newImg, nil
+		}, img,
+	)
 }
 
 func (img *Img) GetGreen() (*Img, error) {
-	newImg, _ := NewImage(img.h, img.w)
-	for i := range img.h {
-		for j := range img.w {
+	return process(
+		func(i, j int, newImg *Img) {
 			newImg.p[i][j].g = img.p[i][j].g
 			newImg.p[i][j].a = img.p[i][j].a
-		}
-	}
-	return newImg, nil
+		}, img,
+	)
 }
 func (img *Img) GetBlue() (*Img, error) {
-	newImg, _ := NewImage(img.h, img.w)
-	for i := range img.h {
-		for j := range img.w {
+	return process(
+		func(i, j int, newImg *Img) {
 			newImg.p[i][j].b = img.p[i][j].b
 			newImg.p[i][j].a = img.p[i][j].a
-		}
-	}
-	return newImg, nil
+		}, img,
+	)
 }
 
 func clampPixelValue(val float64) float64 {
 	return min(max(val, 0), 0xffff)
+}
+
+func process(f func(int, int, *Img), img *Img) (*Img, error) {
+	newImg, _ := NewImage(img.h, img.w)
+	for i := range img.h {
+		for j := range img.w {
+			f(i, j, newImg)
+		}
+	}
+	return newImg, nil
 }
