@@ -7,11 +7,11 @@ import (
 )
 
 func main() {
-	img, err := app.Load("./test.png")
+	img, err := app.Load("testdata/test.png")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	img, _ = img.VerticalFlip()
-	img.SaveAsPNG("compressed.png")
+	img.SaveAsPNG("testdata/flipped.png")
 }
