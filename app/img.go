@@ -152,6 +152,13 @@ func (img *Img) GetBlue() (*Img, error) {
 	)
 }
 
+func (img *Img) HaarCompress(ratio float32) (*Img, error) {
+	if ratio < 0 || ratio > 1 {
+		return nil, errors.New("invalid compression ratio")
+	}
+	return haarCompress(img, ratio)
+}
+
 func clampPixelValue(val float64) float64 {
 	return min(max(val, 0), 0xffff)
 }
