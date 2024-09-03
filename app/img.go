@@ -152,6 +152,18 @@ func (img *Img) GetBlue() (*Img, error) {
 	)
 }
 
+func (img *Img) GetGrayScaleByValue() (*Img, error) {
+	return process(
+		func(i, j int, newImg *Img) {
+			maxVal := max(max(img.p[i][j].r, img.p[i][j].g), img.p[i][j].b)
+			newImg.p[i][j].r = maxVal
+			newImg.p[i][j].g = maxVal
+			newImg.p[i][j].b = maxVal
+			newImg.p[i][j].a = img.p[i][j].a
+		}, img,
+	)
+}
+
 func (img *Img) HaarCompress(ratio float32) (*Img, error) {
 	if ratio < 0 || ratio > 1 {
 		return nil, errors.New("invalid compression ratio")
