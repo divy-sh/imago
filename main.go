@@ -12,6 +12,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	img, _ = img.VerticalFlip()
-	img.SaveAsPNG("testdata/flipped.png")
+	img, _ = img.GetGrayScaleByValue()
+	img.SaveAsPNG("testdata/grayscale_by_value.png")
 }
