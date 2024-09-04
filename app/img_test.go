@@ -1,6 +1,7 @@
 package app
 
 import (
+	"math"
 	"os"
 	"testing"
 )
@@ -111,6 +112,28 @@ func TestGetBlue(t *testing.T) {
 
 	if blueImg.p[0][0].b != 0.3 || blueImg.p[0][0].r != 0 || blueImg.p[0][0].g != 0 {
 		t.Error("GetBlue function failed")
+	}
+}
+
+func TestGetGrayScaleByValue(t *testing.T) {
+	img, _ := NewImage(1, 1)
+	img.p[0][0] = Pixel{r: 0.5, g: 0.2, b: 0.3, a: 1}
+
+	grayImg, _ := img.GetGrayScaleByValue()
+
+	if grayImg.p[0][0].b != 0.5 || grayImg.p[0][0].r != 0.5 || grayImg.p[0][0].g != 0.5 {
+		t.Error("GetGrayScaleByValue function failed")
+	}
+}
+
+func TestGetGrayScaleByIntensity(t *testing.T) {
+	img, _ := NewImage(1, 1)
+	img.p[0][0] = Pixel{r: 0.4, g: 0.2, b: 0.3, a: 1}
+
+	grayImg, _ := img.GetGrayScaleByIntensity()
+
+	if math.Abs(grayImg.p[0][0].b-0.3) >= 0.001 || math.Abs(grayImg.p[0][0].g-0.3) >= 0.001 || math.Abs(grayImg.p[0][0].r-0.3) >= 0.001 {
+		t.Error("GetGrayScaleByIntensity function failed")
 	}
 }
 
