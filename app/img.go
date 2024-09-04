@@ -164,6 +164,18 @@ func (img *Img) GetGrayScaleByValue() (*Img, error) {
 	)
 }
 
+func (img *Img) GetGrayScaleByIntensity() (*Img, error) {
+	return process(
+		func(i, j int, newImg *Img) {
+			average := (img.p[i][j].r + img.p[i][j].g + img.p[i][j].b) / 3
+			newImg.p[i][j].r = average
+			newImg.p[i][j].g = average
+			newImg.p[i][j].b = average
+			newImg.p[i][j].a = img.p[i][j].a
+		}, img,
+	)
+}
+
 func (img *Img) HaarCompress(ratio float32) (*Img, error) {
 	if ratio < 0 || ratio > 1 {
 		return nil, errors.New("invalid compression ratio")
