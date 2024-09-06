@@ -75,7 +75,7 @@ func TestBrighten(t *testing.T) {
 	img, _ := NewImage(1, 1)
 	img.p[0][0] = Pixel{r: 0.5, g: 0.5, b: 0.5, a: 1}
 
-	brightenedImg, _ := img.Brighten(0.1)
+	brightenedImg, _ := img.Brighten(10)
 
 	if brightenedImg.p[0][0].r != 0.6 || brightenedImg.p[0][0].g != 0.6 || brightenedImg.p[0][0].b != 0.6 {
 		t.Error("Brighten function failed")
@@ -133,6 +133,28 @@ func TestGetGrayScaleByIntensity(t *testing.T) {
 	grayImg, _ := img.GetGrayScaleByIntensity()
 
 	if math.Abs(grayImg.p[0][0].b-0.3) >= 0.001 || math.Abs(grayImg.p[0][0].g-0.3) >= 0.001 || math.Abs(grayImg.p[0][0].r-0.3) >= 0.001 {
+		t.Error("GetGrayScaleByIntensity function failed")
+	}
+}
+
+func TestBlur(t *testing.T) {
+	img, _ := NewImage(1, 1)
+	img.p[0][0] = Pixel{r: 0.4, g: 0.2, b: 0.3, a: 1}
+
+	img, _ = img.Blur()
+
+	if math.Abs(img.p[0][0].r-0.1) >= 0.001 || math.Abs(img.p[0][0].g-0.05) >= 0.001 || math.Abs(img.p[0][0].b-0.075) >= 0.001 {
+		t.Error("GetGrayScaleByIntensity function failed")
+	}
+}
+
+func TestSharpen(t *testing.T) {
+	img, _ := NewImage(1, 1)
+	img.p[0][0] = Pixel{r: 0.4, g: 0.2, b: 0.3, a: 1}
+
+	img, _ = img.Sharpen()
+
+	if math.Abs(img.p[0][0].r-0.4) >= 0.001 || math.Abs(img.p[0][0].g-0.2) >= 0.001 || math.Abs(img.p[0][0].b-0.3) >= 0.001 {
 		t.Error("GetGrayScaleByIntensity function failed")
 	}
 }
