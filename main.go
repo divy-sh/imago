@@ -11,7 +11,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	bright, _ := img.Brighten(50)
+	bright.SaveAsPNG("testdata/bright.png")
 	value, _ := img.GetGrayScaleByValue()
 	value.SaveAsPNG("testdata/grayscale_by_value.png")
 	intensity, _ := img.GetGrayScaleByIntensity()

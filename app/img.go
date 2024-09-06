@@ -62,11 +62,12 @@ func Load(path string) (*Img, error) {
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
 			red, green, blue, alpha := m.At(x, y).RGBA()
+			// Normalize the 16-bit color values (0-65535) to the range [0, 1]
 			image.p[y][x] = Pixel{
-				r: float64(red) / 255.0,
-				g: float64(green) / 255.0,
-				b: float64(blue) / 255.0,
-				a: float64(alpha) / 255.0,
+				r: float64(red) / 65535.0,
+				g: float64(green) / 65535.0,
+				b: float64(blue) / 65535.0,
+				a: float64(alpha) / 65535.0,
 			}
 		}
 	}
@@ -78,10 +79,10 @@ func (img *Img) SaveAsPNG(filename string) error {
 	rgba := image.NewRGBA(image.Rect(0, 0, img.w, img.h))
 	for y := 0; y < img.h; y++ {
 		for x := 0; x < img.w; x++ {
-			r := uint8(img.p[y][x].r * 0xffff)
-			g := uint8(img.p[y][x].g * 0xffff)
-			b := uint8(img.p[y][x].b * 0xffff)
-			a := uint8(img.p[y][x].a * 0xffff)
+			r := uint8(img.p[y][x].r * 255)
+			g := uint8(img.p[y][x].g * 255)
+			b := uint8(img.p[y][x].b * 255)
+			a := uint8(img.p[y][x].a * 255)
 			rgba.Set(x, y, color.RGBA{r, g, b, a})
 		}
 	}
@@ -116,11 +117,15 @@ func (img *Img) VerticalFlip() (*Img, error) {
 }
 
 func (img *Img) Brighten(bVal float64) (*Img, error) {
+	if bVal < -100 || bVal > 100 {
+		return nil, errors.New("invalid brightness value")
+	}
+	increase := bVal / 100
 	return process(
 		func(i, j int, newImg *Img) {
-			newImg.p[i][j].r = clampPixelValue(img.p[i][j].r + bVal)
-			newImg.p[i][j].g = clampPixelValue(img.p[i][j].g + bVal)
-			newImg.p[i][j].b = clampPixelValue(img.p[i][j].b + bVal)
+			newImg.p[i][j].r = clampPixelValue(img.p[i][j].r + increase)
+			newImg.p[i][j].g = clampPixelValue(img.p[i][j].g + increase)
+			newImg.p[i][j].b = clampPixelValue(img.p[i][j].b + increase)
 			newImg.p[i][j].a = img.p[i][j].a
 		}, img,
 	)
@@ -204,7 +209,12 @@ func (img *Img) HaarCompress(ratio float32) (*Img, error) {
 }
 
 func clampPixelValue(val float64) float64 {
-	return min(max(val, 0), 0xfffff)
+	if val > 1 {
+		val = 1
+	} else if val < 0 {
+		val = 0
+	}
+	return val
 }
 
 func process(f func(int, int, *Img), img *Img) (*Img, error) {
@@ -222,15 +232,21 @@ func applyFilter(img *Img, filterPointer *[][]float64) (*Img, error) {
 	return process(
 		func(h, w int, newImg *Img) {
 			steps := len(filter) / 2
+			r := 0.
+			g := 0.
+			b := 0.
 			for i := -steps; i <= steps; i++ {
 				for j := -steps; j <= steps; j++ {
 					if h+i >= 0 && h+i < img.h && w+j >= 0 && w+j < img.w {
-						newImg.p[h][w].r += clampPixelValue(filter[i+steps][j+steps] * img.p[h+i][w+j].r)
-						newImg.p[h][w].g += clampPixelValue(filter[i+steps][j+steps] * img.p[h+i][w+j].g)
-						newImg.p[h][w].b += clampPixelValue(filter[i+steps][j+steps] * img.p[h+i][w+j].b)
+						r += filter[i+steps][j+steps] * img.p[h+i][w+j].r
+						g += filter[i+steps][j+steps] * img.p[h+i][w+j].g
+						b += filter[i+steps][j+steps] * img.p[h+i][w+j].b
 					}
 				}
 			}
+			newImg.p[h][w].r = clampPixelValue(r)
+			newImg.p[h][w].g = clampPixelValue(g)
+			newImg.p[h][w].b = clampPixelValue(b)
 			newImg.p[h][w].a = img.p[h][w].a
 		}, img,
 	)
