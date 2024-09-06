@@ -176,6 +176,26 @@ func (img *Img) GetGrayScaleByIntensity() (*Img, error) {
 	)
 }
 
+func (img *Img) Blur() (*Img, error) {
+	blurFilter := [][]float64{
+		{1.0 / 16, 1.0 / 8, 1.0 / 16},
+		{1.0 / 8, 1.0 / 4, 1.0 / 8},
+		{1.0 / 16, 1.0 / 8, 1.0 / 16},
+	}
+	return applyFilter(img, &blurFilter)
+}
+
+func (img *Img) Sharpen() (*Img, error) {
+	sharpenFilter := [][]float64{
+		{-1.0 / 8, -1.0 / 8, -1.0 / 8, -1.0 / 8, -1.0 / 8},
+		{-1.0 / 8, 1.0 / 4, 1.0 / 4, 1.0 / 4, -1.0 / 8},
+		{-1.0 / 8, 1.0 / 4, 1.0, 1.0 / 4, -1.0 / 8},
+		{-1.0 / 8, 1.0 / 4, 1.0 / 4, 1.0 / 4, -1.0 / 8},
+		{-1.0 / 8, -1.0 / 8, -1.0 / 8, -1.0 / 8, -1.0 / 8},
+	}
+	return applyFilter(img, &sharpenFilter)
+}
+
 func (img *Img) HaarCompress(ratio float32) (*Img, error) {
 	if ratio < 0 || ratio > 1 {
 		return nil, errors.New("invalid compression ratio")
@@ -184,7 +204,7 @@ func (img *Img) HaarCompress(ratio float32) (*Img, error) {
 }
 
 func clampPixelValue(val float64) float64 {
-	return min(max(val, 0), 0xffff)
+	return min(max(val, 0), 0xfffff)
 }
 
 func process(f func(int, int, *Img), img *Img) (*Img, error) {
@@ -195,4 +215,23 @@ func process(f func(int, int, *Img), img *Img) (*Img, error) {
 		}
 	}
 	return newImg, nil
+}
+
+func applyFilter(img *Img, filterPointer *[][]float64) (*Img, error) {
+	filter := *filterPointer
+	return process(
+		func(h, w int, newImg *Img) {
+			steps := len(filter) / 2
+			for i := -steps; i <= steps; i++ {
+				for j := -steps; j <= steps; j++ {
+					if h+i >= 0 && h+i < img.h && w+j >= 0 && w+j < img.w {
+						newImg.p[h][w].r += clampPixelValue(filter[i+steps][j+steps] * img.p[h+i][w+j].r)
+						newImg.p[h][w].g += clampPixelValue(filter[i+steps][j+steps] * img.p[h+i][w+j].g)
+						newImg.p[h][w].b += clampPixelValue(filter[i+steps][j+steps] * img.p[h+i][w+j].b)
+					}
+				}
+			}
+			newImg.p[h][w].a = img.p[h][w].a
+		}, img,
+	)
 }

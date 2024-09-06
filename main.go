@@ -12,9 +12,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	val, _ := img.GetGrayScaleByValue()
-	val.SaveAsPNG("testdata/grayscale_by_value.png")
+	value, _ := img.GetGrayScaleByValue()
+	value.SaveAsPNG("testdata/grayscale_by_value.png")
 	intensity, _ := img.GetGrayScaleByIntensity()
 	intensity.SaveAsPNG("testdata/grayscale_by_intensity.png")
-
+	blur, _ := img.Blur()
+	blur.SaveAsPNG("testdata/blur.png")
+	sharpen, _ := img.Sharpen()
+	sharpen.SaveAsPNG("testdata/sharpen.png")
 }
