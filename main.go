@@ -21,4 +21,6 @@ func main() {
 	blur.SaveAsPNG("testdata/blur.png")
 	sharpen, _ := img.Sharpen()
 	sharpen.SaveAsPNG("testdata/sharpen.png")
+	edge, _ := img.EdgeDetect()
+	edge.SaveAsPNG("testdata/edge.png")
 }

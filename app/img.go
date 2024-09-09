@@ -201,6 +201,15 @@ func (img *Img) Sharpen() (*Img, error) {
 	return applyFilter(img, &sharpenFilter)
 }
 
+func (img *Img) EdgeDetect() (*Img, error) {
+	edgeFilter := [][]float64{
+		{-1.0, -1.0, -1.0},
+		{-1.0, 8.0, -1.0},
+		{-1.0, -1.0, -1.0},
+	}
+	return applyFilter(img, &edgeFilter)
+}
+
 func (img *Img) HaarCompress(ratio float32) (*Img, error) {
 	if ratio < 0 || ratio > 1 {
 		return nil, errors.New("invalid compression ratio")
