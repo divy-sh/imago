@@ -217,6 +217,14 @@ func (img *Img) HaarCompress(ratio float32) (*Img, error) {
 	return haarCompress(img, ratio)
 }
 
+// TODO implement this
+func (img *Img) LevelAdjust(blacks, mids, whites float64) (*Img, error) {
+	return nil, nil
+}
+
+/*
+private functions beyond this point
+*/
 func clampPixelValue(val float64) float64 {
 	if val > 1 {
 		val = 1
