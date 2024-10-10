@@ -1,6 +1,5 @@
 # imago
-imago is a command line application to edit your images written in go.
-It supports a plethora of commands that you can use to edit your images.
+imago is a cli image editor written in go.
 
 ## List of operations supported -
 
