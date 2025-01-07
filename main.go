@@ -23,4 +23,6 @@ func main() {
 	sharpen.SaveAsPNG("testdata/sharpen.png")
 	edge, _ := img.EdgeDetect()
 	edge.SaveAsPNG("testdata/edge.png")
+	compressed, _ := img.HaarCompress(0.8)
+	compressed.SaveAsPNG("testdata/compressed.png")
 }
