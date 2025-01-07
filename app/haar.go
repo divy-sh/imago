@@ -33,23 +33,14 @@ func haarCompress(img *Img, ratio float64) (*Img, error) {
 		inverseHaarTransform2d(imgData[i], size)
 	}
 
-	compressedimg := Img{
-		p: make([][]Pixel, img.h),
-		h: img.h,
-		w: img.w,
-	}
-	for i := 0; i < img.h; i++ {
-		compressedimg.p[i] = make([]Pixel, img.w)
-		for j := 0; j < img.w; j++ {
-			compressedimg.p[i][j] = Pixel{
-				r: math.Min(float64(img.h), math.Max(0, imgData[0][i][j])),
-				g: math.Min(float64(img.h), math.Max(0, imgData[1][i][j])),
-				b: math.Min(float64(img.h), math.Max(0, imgData[2][i][j])),
-				a: img.p[i][j].a,
-			}
-		}
-	}
-	return &compressedimg, nil
+	return process(
+		func(i, j int, newImg *Img) {
+			newImg.p[i][j].r = math.Min(float64(img.h), math.Max(0, imgData[0][i][j]))
+			newImg.p[i][j].g = math.Min(float64(img.h), math.Max(0, imgData[1][i][j]))
+			newImg.p[i][j].b = math.Min(float64(img.h), math.Max(0, imgData[2][i][j]))
+			newImg.p[i][j].a = img.p[i][j].a
+		}, img,
+	)
 }
 
 func setValuesZero(comp [][]float64, compRatio float64) {
