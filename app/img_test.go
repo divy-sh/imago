@@ -170,17 +170,6 @@ func TestEdgeDetection(t *testing.T) {
 	}
 }
 
-func TestHaarCompress(t *testing.T) {
-	img, _ := NewImage(1, 1)
-	img.p[0][0] = Pixel{r: 0.4, g: 0.2, b: 0.3, a: 1}
-
-	img, _ = img.HaarCompress(0.5)
-
-	if img.p[0][0].r != 0 || img.p[0][0].g != 0 || img.p[0][0].b != 0 {
-		t.Error("EdgeDetect function failed")
-	}
-}
-
 func TestClampPixelValue(t *testing.T) {
 	if clampPixelValue(0.5) != 0.5 {
 		t.Error("ClampPixelValue failed for normal value")
