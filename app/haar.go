@@ -5,6 +5,7 @@ import (
 	"sort"
 )
 
+// haarCompress compresses an image using the Haar wavelet transform
 func haarCompress(img *Img, ratio float64) (*Img, error) {
 	if ratio < 0 || ratio > 1 {
 		panic("invalid compression ratio")
@@ -43,6 +44,7 @@ func haarCompress(img *Img, ratio float64) (*Img, error) {
 	)
 }
 
+// setValuesZero sets values in the Haar matrix to zero based on the compression ratio
 func setValuesZero(comp [][]float64, compRatio float64) {
 	if compRatio == 0 {
 		return
@@ -69,6 +71,7 @@ func setValuesZero(comp [][]float64, compRatio float64) {
 	}
 }
 
+// haarTransform2d performs the Haar transform on a 2D matrix
 func haarTransform2d(comp [][]float64, size int) {
 	c := size
 	for c > 1 {
@@ -90,6 +93,7 @@ func haarTransform2d(comp [][]float64, size int) {
 	}
 }
 
+// inverseHaarTransform2d performs the inverse Haar transform on a 2D matrix
 func inverseHaarTransform2d(comp [][]float64, size int) {
 	c := 2
 	for c <= size {
@@ -111,6 +115,7 @@ func inverseHaarTransform2d(comp [][]float64, size int) {
 	}
 }
 
+// haarPartial performs the Haar transform on a single row or column
 func haarPartial(comp []float64, length int) {
 	sqrt2 := math.Sqrt(2)
 	pass := make([]float64, length)
@@ -121,6 +126,7 @@ func haarPartial(comp []float64, length int) {
 	copy(comp, pass)
 }
 
+// inverseHaarPartial performs the inverse Haar transform on a single row or column
 func inverseHaarPartial(comp []float64, length int) {
 	sqrt2 := math.Sqrt(2)
 	pass := make([]float64, length)
@@ -131,6 +137,7 @@ func inverseHaarPartial(comp []float64, length int) {
 	copy(comp, pass)
 }
 
+// calculate the next power of 2 greater than num
 func nextPerfectPowerOf2(num int) int {
 	res := 1
 	for res < num {
