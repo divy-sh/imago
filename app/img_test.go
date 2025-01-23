@@ -33,7 +33,7 @@ func TestLoadAndSaveAsPNG(t *testing.T) {
 		t.Fatalf("Failed to load image: %v", err)
 	}
 
-	err = img.SaveAsPNG("../testdata/output.png")
+	err = SaveAsPng(img, "../testdata/output.png")
 	if err != nil {
 		t.Fatalf("Failed to save image: %v", err)
 	}

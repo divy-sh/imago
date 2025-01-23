@@ -7,22 +7,22 @@ import (
 )
 
 func main() {
-	img, err := app.Load("testdata/test.png")
+	img, err := app.Load("testdata/test.Png")
 	if err != nil {
 		log.Fatal(err)
 	}
 	bright, _ := img.Brighten(50)
-	bright.SaveAsPNG("testdata/bright.png")
+	app.SaveAsPng(bright, "testdata/bright.Png")
 	value, _ := img.GetGrayScaleByValue()
-	value.SaveAsPNG("testdata/grayscale_by_value.png")
+	app.SaveAsPng(value, "testdata/grayscale_by_value.Png")
 	intensity, _ := img.GetGrayScaleByIntensity()
-	intensity.SaveAsPNG("testdata/grayscale_by_intensity.png")
+	app.SaveAsPng(intensity, "testdata/grayscale_by_intensity.Png")
 	blur, _ := img.Blur()
-	blur.SaveAsPNG("testdata/blur.png")
+	app.SaveAsPng(blur, "testdata/blur.Png")
 	sharpen, _ := img.Sharpen()
-	sharpen.SaveAsPNG("testdata/sharpen.png")
+	app.SaveAsPng(sharpen, "testdata/sharpen.Png")
 	edge, _ := img.EdgeDetect()
-	edge.SaveAsPNG("testdata/edge.png")
+	app.SaveAsPng(edge, "testdata/edge.Png")
 	compressed, _ := img.HaarCompress(0.8)
-	compressed.SaveAsPNG("testdata/compressed.png")
+	app.SaveAsPng(compressed, "testdata/compressed.Png")
 }
