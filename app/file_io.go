@@ -1,11 +1,13 @@
 package app
 
 import (
+	"errors"
 	"image"
 	"image/color"
 	"image/jpeg"
 	"image/png"
 	"os"
+	"strings"
 )
 
 // Load image from file path
@@ -44,33 +46,19 @@ func Load(path string) (*Img, error) {
 	return image, nil
 }
 
-// SaveAsPNG function to save the Img as a PNG file
-func SaveAsPng(img *Img, filename string) error {
-	rgba := processImageForSave(img)
-	file, err := os.Create(filename)
-	if err != nil {
-		return err
+func SaveImage(img *Img, filename string) error {
+	fileSplit := strings.Split(filename, ".")
+	if len(fileSplit) <= 0 {
+		return errors.New("file extension not provided for image")
 	}
-	defer file.Close()
-	if err := png.Encode(file, rgba); err != nil {
-		return err
+	extension := fileSplit[len(fileSplit)-1]
+	switch extension {
+	case "jpg":
+	case "jpeg":
+		saveAsJpeg(img, filename)
+	case "png":
+		saveAsPng(img, filename)
 	}
-
-	return nil
-}
-
-// SaveAsJPEG function to save the Img as a PNG file
-func SaveAsJpeg(img *Img, filename string) error {
-	rgba := processImageForSave(img)
-	file, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	if err := jpeg.Encode(file, rgba, nil); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -89,4 +77,34 @@ func processImageForSave(img *Img) *image.RGBA {
 		}
 	}
 	return rgba
+}
+
+// SaveAsPNG function to save the Img as a PNG file
+func saveAsPng(img *Img, filename string) error {
+	rgba := processImageForSave(img)
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	if err := png.Encode(file, rgba); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// SaveAsJPEG function to save the Img as a PNG file
+func saveAsJpeg(img *Img, filename string) error {
+	rgba := processImageForSave(img)
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	if err := jpeg.Encode(file, rgba, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
