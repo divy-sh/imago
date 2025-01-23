@@ -3,26 +3,26 @@ package main
 import (
 	"log"
 
-	"github.com/divy-sh/imago/app"
+	"github.com/divy-sh/imago/image"
 )
 
 func main() {
-	img, err := app.Load("testdata/test.png")
+	img, err := image.Load("testdata/test.png")
 	if err != nil {
 		log.Fatal(err)
 	}
 	bright, _ := img.Brighten(50)
-	app.SaveImage(bright, "testdata/bright")
+	image.SaveImage(bright, "testdata/bright.png")
 	value, _ := img.GetGrayScaleByValue()
-	app.SaveImage(value, "testdata/grayscale_by_value")
+	image.SaveImage(value, "testdata/grayscale_by_value.png")
 	intensity, _ := img.GetGrayScaleByIntensity()
-	app.SaveImage(intensity, "testdata/grayscale_by_intensity")
+	image.SaveImage(intensity, "testdata/grayscale_by_intensity.jpeg")
 	blur, _ := img.Blur()
-	app.SaveImage(blur, "testdata/blur")
+	image.SaveImage(blur, "testdata/blur.png")
 	sharpen, _ := img.Sharpen()
-	app.SaveImage(sharpen, "testdata/sharpen")
+	image.SaveImage(sharpen, "testdata/sharpen.jpg")
 	edge, _ := img.EdgeDetect()
-	app.SaveImage(edge, "testdata/edge.Png")
+	image.SaveImage(edge, "testdata/edge.Png")
 	compressed, _ := img.HaarCompress(0.8)
-	app.SaveImage(compressed, "testdata/compressed")
+	image.SaveImage(compressed, "testdata/compressed.jpeg")
 }

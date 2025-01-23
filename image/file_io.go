@@ -1,4 +1,4 @@
-package app
+package image
 
 import (
 	"errors"
@@ -51,9 +51,10 @@ func SaveImage(img *Img, filename string) error {
 	if len(fileSplit) <= 0 {
 		return errors.New("file extension not provided for image")
 	}
-	extension := fileSplit[len(fileSplit)-1]
+	extension := strings.ToLower(fileSplit[len(fileSplit)-1])
 	switch extension {
 	case "jpg":
+		saveAsJpeg(img, filename)
 	case "jpeg":
 		saveAsJpeg(img, filename)
 	case "png":

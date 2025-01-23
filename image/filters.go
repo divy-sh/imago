@@ -1,4 +1,4 @@
-package app
+package image
 
 func (img *Img) Blur() (*Img, error) {
 	blurFilter := [][]float64{
