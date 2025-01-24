@@ -31,5 +31,5 @@
 ```
 - run a command using -
 ```
-    ./image <command> <input image> <output image> <other arguments>
+    ./imago <command> <input image> <output image> <other arguments>
 ```
