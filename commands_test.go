@@ -270,3 +270,25 @@ func TestEdgeDetect(t *testing.T) {
 	}
 	_ = os.Remove("./testdata/output_edge_detect.png") // Cleanup
 }
+
+func TestDrawHistogram(t *testing.T) {
+	img, err := image.Load("./testdata/test.png")
+	if err != nil {
+		t.Fatalf("Failed to load image: %v", err)
+	}
+
+	edgeImg, err := getHistogram(img, []string{"255"})
+	if err != nil {
+		t.Fatalf("Failed to get histogram: %v", err)
+	}
+
+	err = image.SaveImage(edgeImg, "./testdata/output_histogram.png")
+	if err != nil {
+		t.Fatalf("Failed to save histogram image: %v", err)
+	}
+
+	if _, err := os.Stat("./testdata/output_histogram.png"); os.IsNotExist(err) {
+		t.Errorf("Expected file output_histogram.png to exist, but it does not")
+	}
+	_ = os.Remove("./testdata/output_histogram.png") // Cleanup
+}
