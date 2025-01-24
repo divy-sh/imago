@@ -16,12 +16,12 @@
 - **Apply Greyscale by Intensity**: Convert the image to greyscale using the intensity component of the pixels.
 - **Apply Greyscale by Luma**: Convert the image to greyscale using the luma component of the pixels.
 - **Compress an Image**: Compress the image using the Haar wavelet transform.
-- **Generate a Histogram**: Generate a histogram of the image.
-- **Color Correct an Image**: Apply color correction to the image.
 
 ## TODO
 
 - **Adjust Levels**: Adjust the level of an image using black, mid, and white values.
+- **Generate a Histogram**: Generate a histogram of the image.
+- **Color Correct an Image**: Apply color correction to the image.
 
 ## How to run
 
