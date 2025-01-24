@@ -1,6 +1,6 @@
 package image
 
-func (img *Img) Blur() (*Img, error) {
+func blurFilter(img *Img) (*Img, error) {
 	blurFilter := [][]float64{
 		{1.0 / 16, 1.0 / 8, 1.0 / 16},
 		{1.0 / 8, 1.0 / 4, 1.0 / 8},
@@ -9,7 +9,7 @@ func (img *Img) Blur() (*Img, error) {
 	return applyFilter(img, &blurFilter)
 }
 
-func (img *Img) Sharpen() (*Img, error) {
+func sharpenFilter(img *Img) (*Img, error) {
 	sharpenFilter := [][]float64{
 		{-1.0 / 8, -1.0 / 8, -1.0 / 8, -1.0 / 8, -1.0 / 8},
 		{-1.0 / 8, 1.0 / 4, 1.0 / 4, 1.0 / 4, -1.0 / 8},
@@ -20,7 +20,7 @@ func (img *Img) Sharpen() (*Img, error) {
 	return applyFilter(img, &sharpenFilter)
 }
 
-func (img *Img) EdgeDetect() (*Img, error) {
+func edgeDetectFilter(img *Img) (*Img, error) {
 	edgeFilter := [][]float64{
 		{-1.0, -1.0, -1.0},
 		{-1.0, 8.0, -1.0},

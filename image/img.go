@@ -124,6 +124,18 @@ func (img *Img) HaarCompress(ratio float64) (*Img, error) {
 	return haarCompress(img, ratio)
 }
 
+func (img *Img) Sharpen() (*Img, error) {
+	return sharpenFilter(img)
+}
+
+func (img *Img) Blur() (*Img, error) {
+	return blurFilter(img)
+}
+
+func (img *Img) EdgeDetect() (*Img, error) {
+	return edgeDetectFilter(img)
+}
+
 // TODO implement this
 func (img *Img) LevelAdjust(blacks, mids, whites float64) (*Img, error) {
 	return nil, nil
