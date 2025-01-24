@@ -2,14 +2,73 @@ package main
 
 import (
 	"errors"
-	"strconv"
 
 	"github.com/divy-sh/imago/image"
 )
 
+type Command struct {
+	Func          func(*image.Img, []string) (*image.Img, error)
+	Documentation string
+}
+
+var commands = map[string]Command{
+	"horizontalFlip": {
+		Func:          horizontalFlip,
+		Documentation: "horizontalFlip <input path> <output path>",
+	},
+	"verticalFlip": {
+		Func:          verticalFlip,
+		Documentation: "verticalFlip <input path> <output path>",
+	},
+	"brighten": {
+		Func:          brighten,
+		Documentation: "brighten <input path> <output path> <brightness factor, between (-100, 100)>",
+	},
+	"getRed": {
+		Func:          getRed,
+		Documentation: "getRed <input path> <output path>",
+	},
+	"getGreen": {
+		Func:          getGreen,
+		Documentation: "getGreen <input path> <output path>",
+	},
+	"getBlue": {
+		Func:          getBlue,
+		Documentation: "getBlue <input path> <output path>",
+	},
+	"getGrayScaleByValue": {
+		Func:          getGrayScaleByValue,
+		Documentation: "getGrayScaleByValue <input path> <output path>",
+	},
+	"getGrayScaleByIntensity": {
+		Func:          getGrayScaleByIntensity,
+		Documentation: "getGrayScaleByIntensity <input path> <output path>",
+	},
+	"haarCompress": {
+		Func:          haarCompress,
+		Documentation: "haarCompress <input path> <output path> <compression ratio, between (0, 1)>",
+	},
+	"sharpen": {
+		Func:          sharpen,
+		Documentation: "sharpen <input path> <output path>",
+	},
+	"blur": {
+		Func:          blur,
+		Documentation: "blur <input path> <output path>",
+	},
+	"edgedetect": {
+		Func:          edgedetect,
+		Documentation: "edgedetect <input path> <output path>",
+	},
+}
+
 func execute(args []string) error {
+	if len(args) == 1 && args[0] == "help" {
+		help()
+		return nil
+	}
 	if len(args) < 3 {
-		return errors.New("incorrect command provided\n usage: <command> <input path> <output path> <other args>")
+		return errors.New(`incorrect command provided. usage: <command> <input path> <output path> <other args>`)
 	}
 	command := args[0]
 	inputPath := args[1]
@@ -21,7 +80,7 @@ func execute(args []string) error {
 		return err
 	}
 
-	img, err = callCommmand(command, img, args)
+	img, err = commands[command].Func(img, args)
 	if err != nil {
 		return err
 	}
@@ -32,95 +91,8 @@ func execute(args []string) error {
 	return nil
 }
 
-func callCommmand(command string, img *image.Img, args []string) (*image.Img, error) {
-	switch command {
-	case "horizontalFlip":
-		return horizontalFlip(img)
-	case "verticalFlip":
-		return verticalFlip(img)
-	case "brighten":
-		return brighten(img, args)
-	case "getRed":
-		return getRed(img)
-	case "getGreen":
-		return getGreen(img)
-	case "getBlue":
-		return getBlue(img)
-	case "getGrayScaleByValue":
-		return getGrayScaleByValue(img)
-	case "getGrayScaleByIntensity":
-		return getGrayScaleByIntensity(img)
-	case "haarCompress":
-		return haarCompress(img, args)
-	case "sharpen":
-		return sharpen(img)
-	case "blur":
-		return blur(img)
-	case "edgedetect":
-		return edgedetect(img)
-	default:
-		return nil, errors.New("invalid command")
+func help() {
+	for _, cmd := range commands {
+		println(cmd.Documentation, "\n")
 	}
-}
-
-func horizontalFlip(img *image.Img) (*image.Img, error) {
-	return img.HorizontalFlip()
-}
-
-func verticalFlip(img *image.Img) (*image.Img, error) {
-	return img.VerticalFlip()
-}
-
-func brighten(img *image.Img, args []string) (*image.Img, error) {
-	if len(args) < 1 {
-		return nil, errors.New("brightness value not provided\n usage: brighten <input path> <output path> <brightness value>")
-	}
-	brightness, err := strconv.ParseFloat(args[0], 64)
-	if err != nil {
-		return nil, errors.New("invalid brightness value")
-	}
-	return img.Brighten(brightness)
-}
-
-func getRed(img *image.Img) (*image.Img, error) {
-	return img.GetRed()
-}
-
-func getGreen(img *image.Img) (*image.Img, error) {
-	return img.GetGreen()
-}
-
-func getBlue(img *image.Img) (*image.Img, error) {
-	return img.GetBlue()
-}
-
-func getGrayScaleByValue(img *image.Img) (*image.Img, error) {
-	return img.GetGrayScaleByValue()
-}
-
-func getGrayScaleByIntensity(img *image.Img) (*image.Img, error) {
-	return img.GetGrayScaleByIntensity()
-}
-
-func haarCompress(img *image.Img, args []string) (*image.Img, error) {
-	if len(args) < 1 {
-		return nil, errors.New("compression ratio not provided\n usage: brighten <input path> <output path> <brightness value>")
-	}
-	compressionRatio, err := strconv.ParseFloat(args[0], 64)
-	if err != nil {
-		return nil, errors.New("invalid compression ratio")
-	}
-	return img.HaarCompress(compressionRatio)
-}
-
-func sharpen(img *image.Img) (*image.Img, error) {
-	return img.Sharpen()
-}
-
-func blur(img *image.Img) (*image.Img, error) {
-	return img.Blur()
-}
-
-func edgedetect(img *image.Img) (*image.Img, error) {
-	return img.EdgeDetect()
 }

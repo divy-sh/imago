@@ -10,5 +10,6 @@ func main() {
 	err := execute(args)
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println("Run 'imago help' for usage")
 	}
 }
