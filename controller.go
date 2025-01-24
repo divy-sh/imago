@@ -13,52 +13,64 @@ type Command struct {
 
 var commands = map[string]Command{
 	"horizontalFlip": {
-		Func:          horizontalFlip,
-		Documentation: "horizontalFlip <input path> <output path>",
+		Func: horizontalFlip,
+		Documentation: `horizontalFlip <input path> <output path>
+		Flip the image horizontally.`,
 	},
 	"verticalFlip": {
-		Func:          verticalFlip,
-		Documentation: "verticalFlip <input path> <output path>",
+		Func: verticalFlip,
+		Documentation: `verticalFlip <input path> <output path>
+		Flip the image vertically.`,
 	},
 	"brighten": {
-		Func:          brighten,
-		Documentation: "brighten <input path> <output path> <brightness factor, between (-100, 100)>",
+		Func: brighten,
+		Documentation: `brighten <input path> <output path> <brightness factor, between (-100, 100)>
+		Adjust the brightness of the image.`,
 	},
 	"getRed": {
-		Func:          getRed,
-		Documentation: "getRed <input path> <output path>",
+		Func: getRed,
+		Documentation: `getRed <input path> <output path>
+		Extract specific color components (red) from the image.`,
 	},
 	"getGreen": {
-		Func:          getGreen,
-		Documentation: "getGreen <input path> <output path>",
+		Func: getGreen,
+		Documentation: `getGreen <input path> <output path>
+		Extract specific color components (green) from the image.`,
 	},
 	"getBlue": {
-		Func:          getBlue,
-		Documentation: "getBlue <input path> <output path>",
+		Func: getBlue,
+		Documentation: `getBlue <input path> <output path>
+		Extract specific color components (blue) from the image.`,
 	},
 	"getGrayScaleByValue": {
-		Func:          getGrayScaleByValue,
-		Documentation: "getGrayScaleByValue <input path> <output path>",
+		Func: getGrayScaleByValue,
+		Documentation: `getGrayScaleByValue <input path> <output path>
+		Convert the image to greyscale using the value component of the pixels.`,
 	},
 	"getGrayScaleByIntensity": {
-		Func:          getGrayScaleByIntensity,
-		Documentation: "getGrayScaleByIntensity <input path> <output path>",
+		Func: getGrayScaleByIntensity,
+		Documentation: `getGrayScaleByIntensity <input path> <output path>
+		Convert the image to greyscale using the intensity component of the pixels.`,
 	},
 	"haarCompress": {
-		Func:          haarCompress,
-		Documentation: "haarCompress <input path> <output path> <compression ratio, between (0, 1)>",
+		Func: haarCompress,
+		Documentation: `haarCompress <input path> <output path> <compression ratio, between (0, 1)>
+		Compress the image using the Haar wavelet transform.`,
 	},
 	"sharpen": {
-		Func:          sharpen,
-		Documentation: "sharpen <input path> <output path>",
+		Func: sharpen,
+		Documentation: `sharpen <input path> <output path>
+		Apply a sharpen filter to the image.`,
 	},
 	"blur": {
-		Func:          blur,
-		Documentation: "blur <input path> <output path>",
+		Func: blur,
+		Documentation: `blur <input path> <output path>
+		Apply a blur filter to the image.`,
 	},
 	"edgedetect": {
-		Func:          edgedetect,
-		Documentation: "edgedetect <input path> <output path>",
+		Func: edgedetect,
+		Documentation: `edgedetect <input path> <output path>
+		Apply an edge detection filter to the image.`,
 	},
 }
 
