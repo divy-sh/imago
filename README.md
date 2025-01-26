@@ -17,11 +17,12 @@
 - **Apply Greyscale by Luma**: Convert the image to greyscale using the luma component of the pixels.
 - **Compress an Image**: Compress the image using the Haar wavelet transform.
 - **Generate a Histogram**: Generate a histogram of the image.
+- **Color Correct an Image**: Apply color correction to the image.
 
 ## TODO
 
 - **Adjust Levels**: Adjust the level of an image using black, mid, and white values.
-- **Color Correct an Image**: Apply color correction to the image.
+- **Increase test coverage**: Increase the test coverage to include the missing lines of code.
 
 ## How to run
 
