@@ -1,8 +1,28 @@
 package image
 
 func getHistogram(img *Img, histSize int) (*Img, error) {
-	hist := setupHistogram(histSize)
+	hist, _ := NewImage(histSize+1, histSize+1)
 
+	for i := 0; i < histSize; i++ {
+		for j := 0; j < histSize; j++ {
+			hist.p[i][j].a = 1
+		}
+	}
+
+	redP, greenP, blueP := getHistogramData(img, histSize)
+	red, green, blue := *redP, *greenP, *blueP
+
+	maxVal := 0
+	for i := 0; i < histSize; i++ {
+		maxVal = max(maxVal, red[i])
+		maxVal = max(maxVal, green[i])
+		maxVal = max(maxVal, blue[i])
+	}
+
+	return drawHistogram(hist, red, green, blue, maxVal, histSize)
+}
+
+func getHistogramData(img *Img, histSize int) (*[]int, *[]int, *[]int) {
 	red := make([]int, histSize+1)
 	green := make([]int, histSize+1)
 	blue := make([]int, histSize+1)
@@ -15,16 +35,7 @@ func getHistogram(img *Img, histSize int) (*Img, error) {
 
 		}
 	}
-
-	// Find the maximum value in the histogram
-	maxVal := 0
-	for i := 0; i < histSize; i++ {
-		maxVal = max(maxVal, red[i])
-		maxVal = max(maxVal, green[i])
-		maxVal = max(maxVal, blue[i])
-	}
-
-	return drawHistogram(hist, red, green, blue, maxVal, histSize)
+	return &red, &green, &blue
 }
 
 func drawHistogram(hist *Img, red, green, blue []int, maxVal, histSize int) (*Img, error) {
@@ -44,15 +55,4 @@ func drawHistogram(hist *Img, red, green, blue []int, maxVal, histSize int) (*Im
 	}
 
 	return hist, nil
-}
-
-func setupHistogram(histSize int) *Img {
-	hist, _ := NewImage(histSize+1, histSize+1)
-
-	for i := 0; i < histSize; i++ {
-		for j := 0; j < histSize; j++ {
-			hist.p[i][j].a = 1
-		}
-	}
-	return hist
 }
