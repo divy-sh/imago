@@ -2,7 +2,6 @@ package image
 
 import "fmt"
 
-// TODO - fix the color correction algorithm
 func colorCorrect(img *Img) (*Img, error) {
 	histSize := 256
 	redP, greenP, blueP := getHistogramData(img, histSize)
