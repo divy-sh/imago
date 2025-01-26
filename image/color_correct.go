@@ -1,7 +1,5 @@
 package image
 
-import "fmt"
-
 func colorCorrect(img *Img) (*Img, error) {
 	histSize := 256
 	redP, greenP, blueP := getHistogramData(img, histSize)
@@ -11,7 +9,6 @@ func colorCorrect(img *Img) (*Img, error) {
 	rShift := rAvg - average
 	gShift := gAvg - average
 	bShift := bAvg - average
-	fmt.Println(rShift, gShift, bShift)
 	return process(
 		func(i, j int, newImg *Img) {
 			newImg.p[i][j].r = clampPixelValue(img.p[i][j].r + rShift)
