@@ -78,6 +78,11 @@ var commands = map[string]Command{
 		Documentation: `getHistogram <input path> <output path> <histogram size>
 		Generate a histogram of the image.`,
 	},
+	"colorCorrect": {
+		Func: colorCorrect,
+		Documentation: `colorCorrect <input path> <output path>
+		Apply color correction to the image.`,
+	},
 }
 
 func horizontalFlip(img *image.Img, _ []string) (*image.Img, error) {
@@ -151,4 +156,8 @@ func getHistogram(img *image.Img, args []string) (*image.Img, error) {
 		return nil, errors.New("invalid histogram size")
 	}
 	return img.GetHistogram(int(histSize))
+}
+
+func colorCorrect(img *image.Img, _ []string) (*image.Img, error) {
+	return img.ColorCorrect()
 }

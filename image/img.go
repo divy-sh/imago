@@ -141,6 +141,10 @@ func (img *Img) LevelAdjust(blacks, mids, whites float64) (*Img, error) {
 	return nil, nil
 }
 
+func (img *Img) ColorCorrect() (*Img, error) {
+	return colorCorrect(img)
+}
+
 func (img *Img) GetHistogram(histSize int) (*Img, error) {
 	if histSize < 100 {
 		return nil, errors.New("histogram size too small")
