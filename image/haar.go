@@ -1,6 +1,7 @@
 package image
 
 import (
+	"errors"
 	"math"
 	"sort"
 )
@@ -8,7 +9,7 @@ import (
 // haarCompress compresses an image using the Haar wavelet transform
 func haarCompress(img *Img, ratio float64) (*Img, error) {
 	if ratio < 0 || ratio > 1 {
-		panic("invalid compression ratio")
+		return nil, errors.New("invalid compression ratio")
 	}
 
 	size := max(nextPerfectPowerOf2(img.h), nextPerfectPowerOf2(img.w))

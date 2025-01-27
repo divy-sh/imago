@@ -22,7 +22,10 @@
 ## TODO
 
 - **Adjust Levels**: Adjust the level of an image using black, mid, and white values.
-- **Increase test coverage**: Increase the test coverage to include the missing lines of code.
+
+## Test Coverage
+
+97.3 percent coverage.
 
 ## How to run
 

@@ -73,6 +73,33 @@ func TestBrighten(t *testing.T) {
 	_ = os.Remove("./testdata/output_brighten.png") // Cleanup
 }
 
+func TestBrightenInvalidArguments(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{
+			name: "No arguments",
+			args: []string{},
+		},
+		{
+			name: "Invalid argument",
+			args: []string{"invalid"},
+		},
+	}
+	for _, tt := range tests {
+		img, err := image.Load("./testdata/test.png")
+		if err != nil {
+			t.Fatalf("Failed to load image: %v", err)
+		}
+
+		_, err = brighten(img, tt.args)
+		if err == nil {
+			t.Fatalf("expected failure to brighten image, go no error")
+		}
+	}
+}
+
 func TestGetRed(t *testing.T) {
 	img, err := image.Load("./testdata/test.png")
 	if err != nil {
@@ -205,6 +232,33 @@ func TestHaarCompress(t *testing.T) {
 	_ = os.Remove("./testdata/output_haar_compress.png") // Cleanup
 }
 
+func TestHaarCompressInvalidArguments(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{
+			name: "No arguments",
+			args: []string{},
+		},
+		{
+			name: "Invalid argument",
+			args: []string{"invalid"},
+		},
+	}
+	for _, tt := range tests {
+		img, err := image.Load("./testdata/test.png")
+		if err != nil {
+			t.Fatalf("Failed to load image: %v", err)
+		}
+
+		_, err = haarCompress(img, tt.args)
+		if err == nil {
+			t.Fatalf("expected failure to compress image, go no error")
+		}
+	}
+}
+
 func TestSharpen(t *testing.T) {
 	img, err := image.Load("./testdata/test.png")
 	if err != nil {
@@ -291,4 +345,53 @@ func TestDrawHistogram(t *testing.T) {
 		t.Errorf("Expected file output_histogram.png to exist, but it does not")
 	}
 	_ = os.Remove("./testdata/output_histogram.png") // Cleanup
+}
+
+func TestGetHistogramInvalidArguments(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{
+			name: "No arguments",
+			args: []string{},
+		},
+		{
+			name: "Invalid argument",
+			args: []string{"invalid"},
+		},
+	}
+	for _, tt := range tests {
+		img, err := image.Load("./testdata/test.png")
+		if err != nil {
+			t.Fatalf("Failed to load image: %v", err)
+		}
+
+		_, err = getHistogram(img, tt.args)
+		if err == nil {
+			t.Fatalf("expected failure to brighten image, go no error")
+		}
+	}
+}
+
+func TestColorCorrect(t *testing.T) {
+	img, err := image.Load("./testdata/test.png")
+	if err != nil {
+		t.Fatalf("Failed to load image: %v", err)
+	}
+
+	edgeImg, err := colorCorrect(img, []string{})
+	if err != nil {
+		t.Fatalf("Failed to color correct: %v", err)
+	}
+
+	err = image.SaveImage(edgeImg, "./testdata/output_color_correct.png")
+	if err != nil {
+		t.Fatalf("Failed to save color corrected image: %v", err)
+	}
+
+	if _, err := os.Stat("./testdata/output_color_correct.png"); os.IsNotExist(err) {
+		t.Errorf("Expected file output_color_correct.png to exist, but it does not")
+	}
+	_ = os.Remove("./testdata/output_color_correct.png") // Cleanup
 }

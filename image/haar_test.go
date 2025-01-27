@@ -61,3 +61,22 @@ func TestHaarCompress(t *testing.T) {
 		})
 	}
 }
+
+func TestHaarCompressInvalidRatio(t *testing.T) {
+	tests := []struct {
+		name             string
+		compressionRatio int
+	}{
+		{"haar compression ratio less than zero", -1},
+		{"haar compression ratio greater than one", 2},
+	}
+	for _, tt := range tests {
+		img, _ := NewImage(1, 1)
+		img.p[0][0] = Pixel{r: 0.5, g: 0.2, b: 0.3, a: 1}
+
+		_, err := haarCompress(img, float64(tt.compressionRatio))
+		if err == nil || err.Error() != "invalid compression ratio" {
+			t.Error("Expected error for invalid ratio")
+		}
+	}
+}

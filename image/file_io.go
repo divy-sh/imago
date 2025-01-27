@@ -48,7 +48,7 @@ func Load(path string) (*Img, error) {
 
 func SaveImage(img *Img, filename string) error {
 	fileSplit := strings.Split(filename, ".")
-	if len(fileSplit) <= 0 {
+	if len(fileSplit) <= 1 {
 		return errors.New("file extension not provided for image")
 	}
 	extension := strings.ToLower(fileSplit[len(fileSplit)-1])
@@ -59,6 +59,8 @@ func SaveImage(img *Img, filename string) error {
 		saveAsJpeg(img, filename)
 	case "png":
 		saveAsPng(img, filename)
+	default:
+		return errors.New("unsupported file extension: " + extension)
 	}
 	return nil
 }

@@ -1,7 +1,6 @@
 package image
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -26,7 +25,6 @@ func TestColorCorrect(t *testing.T) {
 
 	// Call colorCorrect
 	correctedImg, err := colorCorrect(img)
-	fmt.Println(correctedImg)
 	if err != nil {
 		t.Fatalf("colorCorrect returned an error: %v", err)
 	}

@@ -1,6 +1,7 @@
 package image
 
 import (
+	"fmt"
 	"math"
 	"testing"
 )
@@ -63,6 +64,25 @@ func TestBrighten(t *testing.T) {
 	}
 }
 
+func TestImgBrightenInvalidValue(t *testing.T) {
+	tests := []struct {
+		name string
+		bVal int
+	}{
+		{"haar compression ratio less than -100", -101},
+		{"haar compression ratio greater than 100", 101},
+	}
+	for _, tt := range tests {
+		img, _ := NewImage(1, 1)
+		img.p[0][0] = Pixel{r: 0.5, g: 0.2, b: 0.3, a: 1}
+
+		_, err := img.Brighten(float64(tt.bVal))
+		if err == nil || err.Error() != "invalid brightness value" {
+			t.Error("Expected error for invalid value")
+		}
+	}
+}
+
 func TestGetRed(t *testing.T) {
 	img, _ := NewImage(1, 1)
 	img.p[0][0] = Pixel{r: 0.5, g: 0.2, b: 0.3, a: 1}
@@ -107,6 +127,35 @@ func TestGetGrayScaleByValue(t *testing.T) {
 	}
 }
 
+func TestImgHaarCompress(t *testing.T) {
+	img, _ := NewImage(1, 1)
+	img.p[0][0] = Pixel{r: 0.5, g: 0.2, b: 0.3, a: 1}
+
+	compressed, _ := img.HaarCompress(0.5)
+	if compressed.p[0][0].b != 0 || compressed.p[0][0].r != 0 || compressed.p[0][0].g != 0 {
+		t.Error("haar compress function failed")
+	}
+}
+
+func TestImgHaarCompressInvalidRatio(t *testing.T) {
+	tests := []struct {
+		name             string
+		compressionRatio int
+	}{
+		{"haar compression ratio less than zero", -1},
+		{"haar compression ratio greater than one", 2},
+	}
+	for _, tt := range tests {
+		img, _ := NewImage(1, 1)
+		img.p[0][0] = Pixel{r: 0.5, g: 0.2, b: 0.3, a: 1}
+
+		_, err := img.HaarCompress(float64(tt.compressionRatio))
+		if err == nil || err.Error() != "invalid compression ratio" {
+			t.Error("Expected error for invalid ratio")
+		}
+	}
+}
+
 func TestGetGrayScaleByIntensity(t *testing.T) {
 	img, _ := NewImage(1, 1)
 	img.p[0][0] = Pixel{r: 0.4, g: 0.2, b: 0.3, a: 1}
@@ -115,6 +164,40 @@ func TestGetGrayScaleByIntensity(t *testing.T) {
 
 	if math.Abs(grayImg.p[0][0].b-0.3) >= 0.001 || math.Abs(grayImg.p[0][0].g-0.3) >= 0.001 || math.Abs(grayImg.p[0][0].r-0.3) >= 0.001 {
 		t.Error("GetGrayScaleByIntensity function failed")
+	}
+}
+
+func TestColorCorrection(t *testing.T) {
+	img, _ := NewImage(1, 1)
+	img.p[0][0] = Pixel{r: 0.9, g: 0.2, b: 0.3, a: 1}
+
+	correctedImg, _ := img.ColorCorrect()
+	fmt.Println(correctedImg.p[0][0])
+	if correctedImg.p[0][0].r != 0.9 || correctedImg.p[0][0].g != 0.2 || correctedImg.p[0][0].b != 0.3 {
+		t.Error("ColorCorrection function failed")
+	}
+}
+
+func TestImgGetHistogram(t *testing.T) {
+	img, _ := NewImage(1, 1)
+	img.p[0][0] = Pixel{r: 0.9, g: 0.2, b: 0.3, a: 1}
+
+	hist, _ := img.GetHistogram(256)
+
+	fmt.Println(hist.p[0][51])
+	if hist.p[0][51].r != 0 || hist.p[0][51].g != 0 || hist.p[0][51].b != 1 {
+		t.Error("GetHistogram function failed")
+	}
+}
+
+func TestImgGetHistogramSizeTooSmall(t *testing.T) {
+	img, _ := NewImage(1, 1)
+	img.p[0][0] = Pixel{r: 0.9, g: 0.2, b: 0.3, a: 1}
+
+	_, err := img.GetHistogram(99)
+	fmt.Println(err)
+	if err == nil || err.Error() != "histogram size too small" {
+		t.Error("Expected error for small histogram size")
 	}
 }
 
