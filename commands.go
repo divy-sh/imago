@@ -126,7 +126,7 @@ func getGrayScaleByIntensity(img *image.Img, _ []string) (*image.Img, error) {
 
 func haarCompress(img *image.Img, args []string) (*image.Img, error) {
 	if len(args) < 1 {
-		return nil, errors.New("compression ratio not provided\n usage: brighten <input path> <output path> <brightness value>")
+		return nil, errors.New("compression ratio not provided\n usage: haarCompress <input path> <output path> <compression ratio")
 	}
 	compressionRatio, err := strconv.ParseFloat(args[0], 64)
 	if err != nil {
