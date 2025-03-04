@@ -2,6 +2,7 @@ package image
 
 import (
 	"errors"
+	"math"
 )
 
 type Pixel struct {
@@ -136,9 +137,31 @@ func (img *Img) EdgeDetect() (*Img, error) {
 	return edgeDetectFilter(img)
 }
 
-// TODO implement this
 func (img *Img) LevelAdjust(blacks, mids, whites float64) (*Img, error) {
-	return nil, nil
+	if blacks < 0 || blacks >= mids || mids >= whites || whites > 1 {
+		return nil, errors.New("invalid level adjustment values")
+	}
+
+	adjust := func(value float64) float64 {
+		if value <= blacks {
+			return 0
+		} else if value >= whites {
+			return 1
+		} else {
+			normalized := (value - blacks) / (whites - blacks)
+			gammaCorrected := math.Pow(normalized, math.Log(0.5)/math.Log(mids))
+			return gammaCorrected
+		}
+	}
+
+	return process(
+		func(i, j int, newImg *Img) {
+			newImg.p[i][j].r = adjust(img.p[i][j].r)
+			newImg.p[i][j].g = adjust(img.p[i][j].g)
+			newImg.p[i][j].b = adjust(img.p[i][j].b)
+			newImg.p[i][j].a = img.p[i][j].a
+		}, img,
+	)
 }
 
 func (img *Img) ColorCorrect() (*Img, error) {

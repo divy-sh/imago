@@ -395,3 +395,26 @@ func TestColorCorrect(t *testing.T) {
 	}
 	_ = os.Remove("./testdata/output_color_correct.png") // Cleanup
 }
+
+func TestLevelAdjust(t *testing.T) {
+	OutputPath := "./testdata/output_level_adjusted.png"
+	img, err := image.Load("./testdata/test.png")
+	if err != nil {
+		t.Fatalf("Failed to load image: %v", err)
+	}
+
+	levelAdjustedImg, err := levelAdjust(img, []string{"0.1", "0.3", "0.7"})
+	if err != nil {
+		t.Fatalf("Failed to color correct: %v", err)
+	}
+
+	err = image.SaveImage(levelAdjustedImg, OutputPath)
+	if err != nil {
+		t.Fatalf("Failed to save level adjusted image: %v", err)
+	}
+
+	if _, err := os.Stat(OutputPath); os.IsNotExist(err) {
+		t.Errorf("Expected file %s to exist, but it does not", OutputPath)
+	}
+	_ = os.Remove(OutputPath) // Cleanup
+}

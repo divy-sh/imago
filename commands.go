@@ -83,6 +83,11 @@ var commands = map[string]Command{
 		Documentation: `colorCorrect <input path> <output path>
 		Apply color correction to the image.`,
 	},
+	"levelAdjust": {
+		Func: levelAdjust,
+		Documentation: `levelAdjust <input path> <output path> <blacks> <mids> <whites>
+		Apply level adjustment to the image.`,
+	},
 }
 
 func horizontalFlip(img *image.Img, _ []string) (*image.Img, error) {
@@ -160,4 +165,24 @@ func getHistogram(img *image.Img, args []string) (*image.Img, error) {
 
 func colorCorrect(img *image.Img, _ []string) (*image.Img, error) {
 	return img.ColorCorrect()
+}
+
+func levelAdjust(img *image.Img, args []string) (*image.Img, error) {
+	if len(args) < 3 {
+		return nil, errors.New("level adjust requires 3 values\n usage: levelAdjust" +
+			"<input path> <output path> <blacks> <mids> <whites>")
+	}
+	blacks, err := strconv.ParseFloat(args[0], 64)
+	if err != nil {
+		return nil, errors.New("invalid blacks value")
+	}
+	mids, err := strconv.ParseFloat(args[1], 64)
+	if err != nil {
+		return nil, errors.New("invalid mids value")
+	}
+	whites, err := strconv.ParseFloat(args[2], 64)
+	if err != nil {
+		return nil, errors.New("invalid whites value")
+	}
+	return img.LevelAdjust(blacks, mids, whites)
 }
