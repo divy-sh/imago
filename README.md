@@ -18,10 +18,11 @@
 - **Compress an Image**: Compress the image using the Haar wavelet transform.
 - **Generate a Histogram**: Generate a histogram of the image.
 - **Color Correct an Image**: Apply color correction to the image.
+- **Adjust Levels**: Adjust the level of an image using black, mid, and white values.
 
 ## TODO
 
-- **Adjust Levels**: Adjust the level of an image using black, mid, and white values.
+- **Mask**: apply an image mask starting at a certain index to the image.
 
 ## Test Coverage
 
