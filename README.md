@@ -24,9 +24,17 @@
 
 - **Mask**: apply an image mask starting at a certain index to the image.
 
-## Test Coverage
+# Test Coverage
+- Test coverage can be verified by generating cover.html file
 
-97.3 percent coverage.
+- To generate the cover.html file, run these commands:
+```bash
+go test -v -coverprofile cover.out ./...
+```
+```bash
+go tool cover -html cover.out -o cover.html
+```
+
 
 ## How to run
 
